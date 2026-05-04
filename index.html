@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Series & Forecasting — Complete Curriculum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6f0;
+    --muted: #8b8a9a;
+    --faint: #3a3a4a;
+
+    --c-foundation: #4ade80;
+    --c-foundation-bg: rgba(74,222,128,0.08);
+    --c-foundation-border: rgba(74,222,128,0.25);
+
+    --c-intermediate: #60a5fa;
+    --c-intermediate-bg: rgba(96,165,250,0.08);
+    --c-intermediate-border: rgba(96,165,250,0.25);
+
+    --c-advanced: #f59e0b;
+    --c-advanced-bg: rgba(245,158,11,0.08);
+    --c-advanced-border: rgba(245,158,11,0.25);
+
+    --c-phd: #e879f9;
+    --c-phd-bg: rgba(232,121,249,0.08);
+    --c-phd-border: rgba(232,121,249,0.25);
+
+    --c-causal: #f87171;
+    --c-causal-bg: rgba(248,113,113,0.08);
+    --c-causal-border: rgba(248,113,113,0.25);
+
+    --c-ml: #34d399;
+    --c-ml-bg: rgba(52,211,153,0.08);
+    --c-ml-border: rgba(52,211,153,0.25);
+
+    --c-dml: #a78bfa;
+    --c-dml-bg: rgba(167,139,250,0.08);
+    --c-dml-border: rgba(167,139,250,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+  /* HERO */
+  .hero {
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, #60a5fa, #e879f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* FILTER NAV */
+  .filter-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--border2);
+  }
+
+  .filter-btn.active { color: var(--text); }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .section-title-wrap { flex: 1; }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--faint);
+    white-space: nowrap;
+    padding-bottom: 4px;
+  }
+
+  /* TOPIC GRID */
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .topic-card {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .topic-card:hover { background: var(--surface2); }
+
+  .topic-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .topic-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .level-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .topic-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .topic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Level colors */
+  .lv-foundation { --lc: var(--c-foundation); --lbg: var(--c-foundation-bg); --lb: var(--c-foundation-border); }
+  .lv-intermediate { --lc: var(--c-intermediate); --lbg: var(--c-intermediate-bg); --lb: var(--c-intermediate-border); }
+  .lv-advanced { --lc: var(--c-advanced); --lbg: var(--c-advanced-bg); --lb: var(--c-advanced-border); }
+  .lv-phd { --lc: var(--c-phd); --lbg: var(--c-phd-bg); --lb: var(--c-phd-border); }
+
+  .level-dot { background: var(--lc); }
+  .tag { background: var(--lbg); color: var(--lc); border: 1px solid var(--lb); }
+
+  /* SUBSECTION LABEL */
+  .subsection-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding: 0.75rem 1.5rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    grid-column: 1 / -1;
+  }
+
+  /* PATH INDICATOR */
+  .path-strip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 1rem 1.25rem;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+  }
+
+  .path-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .path-label { font-size: 12px; color: var(--muted); }
+  .path-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--text);
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .legend-text { font-size: 12px; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--faint);
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 600px) {
+    .topic-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Complete Curriculum · From Basics to Frontier Research</div>
+    <h1>Time Series,<br>Forecasting &<br><em>Causal Inference</em></h1>
+    <p class="hero-sub">Every topic from introductory statistics to cutting-edge PhD research — covering classical methods, machine learning, deep learning, causal inference, Double Machine Learning, and beyond.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">200+</span><span class="stat-label">Topics Covered</span></div>
+      <div class="stat"><span class="stat-num">9</span><span class="stat-label">Core Domains</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Levels: Basic → PhD</span></div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-foundation)"></div><span class="legend-text">Foundation — Introductory / Undergrad</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-intermediate)"></div><span class="legend-text">Intermediate — Masters level</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-advanced)"></div><span class="legend-text">Advanced — Senior practitioner / early PhD</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-phd)"></div><span class="legend-text">PhD / Frontier — Cutting-edge research</span></div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 — FOUNDATIONS
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="foundations">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-foundation-bg); color:var(--c-foundation)">①</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-foundation)">Section 01</div>
+        <div class="section-title">Foundations of Time Series</div>
+      </div>
+      <div class="section-count">28 topics</div>
+    </div>
+
+    <div class="topic-grid">
+      <div class="subsection-label">Core Concepts</div>
+
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">What is a Time Series?</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Definition, examples across domains, discrete vs continuous, deterministic vs stochastic</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Time Series Components</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Trend, seasonality, cyclicality, irregular/noise components and their decomposition</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Stationarity</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Strict vs weak stationarity, mean/variance/autocovariance constancy, visual and formal tests</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Autocorrelation & ACF/PACF</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Autocorrelation function, partial autocorrelation function, correlograms, Ljung-Box test</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">White Noise & Random Walk</span><span class="level-dot"></span></div>
+        <p class="topic-desc">IID noise, Gaussian white noise, random walk with/without drift, unit roots</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Differencing</span><span class="level-dot"></span></div>
+        <p class="topic-desc">First and seasonal differencing, overdifferencing, backshift operator notation</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Time Series Decomposition</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Additive vs multiplicative, classical decomposition, STL (Seasonal-Trend-LOESS)</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Visualization & EDA</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Time plots, lag plots, seasonal subseries plots, calendar heatmaps, horizon charts</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+
+      <div class="subsection-label">Classical Smoothing Methods</div>
+
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Moving Averages</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Simple, weighted, centered MA, used for smoothing and trend estimation</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Exponential Smoothing (SES)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Simple exponential smoothing, α parameter, optimal parameter selection</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Holt's Linear Trend</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Double exponential smoothing, trend component, damped trend variant</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Holt-Winters Seasonal</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Triple exponential smoothing, additive/multiplicative seasonality, ETS framework</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+
+      <div class="subsection-label">Unit Roots & Stationarity Tests</div>
+
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">ADF Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Augmented Dickey-Fuller, lag selection, critical values, null of unit root</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">KPSS Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Kwiatkowski-Phillips-Schmidt-Shin, null of stationarity, complementary to ADF</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Phillips-Perron Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Non-parametric correction for serial correlation, HAC variance estimation</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Zivot-Andrews Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Unit root test allowing for structural breaks, endogenous break point detection</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Seasonal Unit Root Tests</span><span class="level-dot"></span></div>
+        <p class="topic-desc">HEGY, CH test, seasonal differencing necessity, periodic integration</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+
+      <div class="subsection-label">Probability Models</div>
+
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">AR Models (Autoregressive)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">AR(p) process, Yule-Walker equations, stationarity conditions, partial autocorrelations</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">MA Models (Moving Average)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">MA(q) process, invertibility, autocorrelation structure, duality with AR</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">ARMA Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Mixed AR and MA, identification via ACF/PACF, Wold decomposition</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">ARIMA Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Integrated ARMA, Box-Jenkins methodology, order selection, forecasting</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">SARIMA Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Seasonal ARIMA, seasonal differencing, multiplicative seasonality, airline model</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">ARIMAX / SARIMAX</span><span class="level-dot"></span></div>
+        <p class="topic-desc">ARIMA with exogenous regressors, transfer function models, intervention analysis</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Model Selection Criteria</span><span class="level-dot"></span></div>
+        <p class="topic-desc">AIC, BIC, AICc, Hannan-Quinn, cross-validation for time series</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Forecast Evaluation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">MAE, RMSE, MAPE, MASE, Diebold-Mariano test, rolling-origin evaluation</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 — VOLATILITY & FINANCIAL TS
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="volatility">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-advanced-bg); color:var(--c-advanced)">②</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-advanced)">Section 02</div>
+        <div class="section-title">Volatility Modeling</div>
+      </div>
+      <div class="section-count">18 topics</div>
+    </div>
+
+    <div class="topic-grid">
+      <div class="subsection-label">ARCH/GARCH Family</div>
+
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">ARCH Model</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Engle's ARCH, conditional heteroscedasticity, ARCH-LM test, stylized facts</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">GARCH(p,q)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Generalized ARCH, volatility persistence, IGARCH, variance targeting</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">EGARCH</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Exponential GARCH, asymmetric volatility, leverage effect, Nelson 1991</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">GJR-GARCH / TGARCH</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Threshold GARCH, sign bias, leverage effect, Glosten-Jagannathan-Runkle</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">FIGARCH & Long Memory Volatility</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Fractionally integrated GARCH, hyperbolic decay, Baillie et al. 1996</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Multivariate GARCH</span><span class="level-dot"></span></div>
+        <p class="topic-desc">BEKK, DCC, CCC, GOGARCH, time-varying correlations, portfolio risk</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Realized Volatility</span><span class="level-dot"></span></div>
+        <p class="topic-desc">High-frequency data, realized variance, bipower variation, jump separation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Stochastic Volatility Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Hull-White, Heston SV, MCMC estimation, particle filtering for SV</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Cointegration & Long-Run</div>
+
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Cointegration</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Engle-Granger, long-run equilibrium, spurious regression, common stochastic trends</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Johansen Cointegration Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Trace and max-eigenvalue statistics, cointegrating rank, VECM representation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Error Correction Models (ECM/VECM)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Vector Error Correction, adjustment dynamics, long-run vs short-run</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Fractional Integration & ARFIMA</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Long memory, Hurst exponent, d ∈ (0,0.5), Geweke-Porter-Hudak estimator</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">VAR Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Vector autoregression, lag selection, Granger causality, forecast error variance decomposition</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Structural VAR (SVAR)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Identification via short/long-run restrictions, sign restrictions, Cholesky decomp</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Impulse Response Functions</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Orthogonalized IRFs, forecast error variance decomposition, local projections</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Local Projections (Jordà)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Direct h-step regression, robust to model misspecification, vs VAR-based IRFs</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Proxy-SVAR & External Instruments</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Identification through external instruments, Stock-Watson-Mertens-Ravn</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Factor-Augmented VAR (FAVAR)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Large info sets, latent factors + VAR, Bernanke-Boivin-Eliasz 2005</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 — STATE SPACE & BAYESIAN
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="statespace">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-phd-bg); color:var(--c-phd)">③</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-phd)">Section 03</div>
+        <div class="section-title">State Space & Bayesian Methods</div>
+      </div>
+      <div class="section-count">16 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">State Space Framework</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">State Space Models (SSM)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Transition and measurement equations, latent states, general linear Gaussian form</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Kalman Filter</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Prediction and update steps, log-likelihood, Kalman gain, missing data handling</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Kalman Smoother</span><span class="level-dot"></span></div>
+        <p class="topic-desc">RTS smoother, backward pass, smoothed state estimates, signal extraction</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Structural Time Series Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Harvey's unobserved components: local level, local linear trend, seasonal SSM</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Extended & Unscented Kalman Filters</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Nonlinear state space, EKF linearization, UKF sigma points, consistency</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Particle Filters (SMC)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Sequential Monte Carlo, bootstrap filter, importance resampling, non-Gaussian SSM</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Nonlinear SSM & PMCMC</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Particle MCMC, PMMH, SMC², Andrieu-Doucet-Holenstein</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Bayesian Time Series</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Bayesian VAR (BVAR)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Minnesota prior, BVAR forecasting, overparameterization shrinkage, Litterman</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Large BVAR</span><span class="level-dot"></span></div>
+        <p class="topic-desc">100+ variable BVAR, natural conjugate prior, Jarociński-Makarova, big data macro</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Time-Varying Parameter VAR (TVP-VAR)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Drifting coefficients + SV, Primiceri 2005, regime changes, structural stability</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Dynamic Factor Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Large-N-T panels, Forni-Hallin-Lippi-Reichlin, nowcasting, common shocks</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Gaussian Processes for Time Series</span><span class="level-dot"></span></div>
+        <p class="topic-desc">GP regression, covariance kernels, hyperparameter learning, uncertainty quantification</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Regime-Switching Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Markov-Switching ARMA/VAR, Hamilton filter, regime probabilities, business cycles</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Threshold & SETAR Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Self-exciting TAR, momentum-TAR (M-TAR), asymmetric adjustment, STAR</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Functional Data & Infinite-Dimensional TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Functional AR, basis expansion, yield curves as functional data, FPCA</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Spectral Analysis & Frequency Domain</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Periodogram, spectral density, Fourier transform, band-pass filters, HP filter</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 — MODERN FORECASTING
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="forecasting">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-intermediate-bg); color:var(--c-intermediate)">④</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-intermediate)">Section 04</div>
+        <div class="section-title">Modern Forecasting Methods</div>
+      </div>
+      <div class="section-count">24 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">Prophet & Decomposition-Based</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Facebook Prophet</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Trend + seasonality + holidays, logistic growth, changepoints, uncertainty intervals</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">NeuralProphet</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Neural extension of Prophet, AR-Net, multi-step forecasting, covariate support</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">MSTL + ETSx</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Multi-seasonal STL, complex seasonality, StatsForecast library, efficient computation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">Probabilistic Forecasting</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Prediction Intervals</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Coverage, width, calibration, bootstrap methods, ARIMA forecast intervals</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Conformal Prediction for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Distribution-free intervals, EnbPI, split conformal, coverage guarantees</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Quantile Regression</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Pinball loss, quantile crossing, QR forests, QRNN, full distribution estimation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Distributional Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Scoring rules, CRPS, energy score, proper scoring, distributional regression</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Forecast Combination & BMA</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Bates-Granger, optimal weights, trimmed mean, Bayesian Model Averaging, pool</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Hierarchical & Multi-Series</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Hierarchical Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Bottom-up, top-down, middle-out, reconciliation, supply chain applications</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">MinT Reconciliation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Minimum trace reconciliation, Wickramasuriya et al., coherent forecasts</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Cross-Learning & Global Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Training across many series, cluster-then-forecast, global vs local models</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">Benchmark & Competition Methods</div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">Naïve & Seasonal Naïve Benchmarks</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Last-value, seasonal-last, drift, required baselines for any forecasting study</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Theta Method</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Assimakopoulos-Nikolopoulos, M3 competition winner, SES relationship, variants</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">TBATS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Trigonometric ETS with ARMA errors, Box-Cox, multiple complex seasonalities</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">M4 & M5 Competition Insights</span><span class="level-dot"></span></div>
+        <p class="topic-desc">N-BEATS, ES-RNN, winning ensembles, Walmart demand forecasting lessons</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">Nowcasting</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Nowcasting Framework</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Real-time data vintages, ragged-edge data, GDP nowcasting, Bańbura et al.</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">MIDAS Regression</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Mixed-data sampling, weighting schemes, bridge equations, mixed frequency</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">News & Surprise Approach</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Bok et al., information flow, Kalman gain interpretation, forecast revision analysis</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Forecast Evaluation Deep Dive</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Diebold-Mariano Test</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Comparing predictive accuracy, HAC S-statistic, modified DM for nested models</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Mincer-Zarnowitz Regression</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Efficiency test, bias and efficiency, encompassing tests, rationality</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Model Confidence Set (MCS)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Hansen-Lunde-Nason, best model set, superior predictive ability test</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Predictability & No-Predictability Tests</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Giacomini-White test, conditional predictive ability, environment changes</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 — ML FOR TIME SERIES
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="ml">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-ml-bg); color:var(--c-ml)">⑤</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-ml)">Section 05</div>
+        <div class="section-title">Machine Learning for Time Series</div>
+      </div>
+      <div class="section-count">26 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">Classical ML Approaches</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Feature Engineering for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Lag features, rolling statistics, calendar features, Fourier terms, tsfresh</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Tree-Based Methods (XGBoost, LightGBM)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Tabular TS with lagged features, recursive vs direct, DART, feature importance</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Random Forests for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Bagging with lag features, OOB evaluation, time-aware cross-validation</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Support Vector Regression (SVR)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">ε-insensitive loss, kernel trick, multi-step SVR forecasting</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Time Series Cross-Validation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Expanding window, sliding window, gap, purged CV, embargo, leakage prevention</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Multi-Step Forecasting Strategies</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Recursive, direct, MIMO, DIRMO, strategy comparison, error accumulation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">Deep Learning Architectures</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">LSTM & GRU Networks</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Long short-term memory, gated recurrent units, sequence modeling, vanishing gradient</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">1D Convolutional Networks (TCN)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Temporal convolutional networks, dilated causal convolutions, WaveNet architecture</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Seq2Seq & Encoder-Decoder</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Variable-length forecasting, attention mechanism, teacher forcing, DeepAR basis</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Attention Mechanisms for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Temporal attention, self-attention, multi-head attention, positional encoding for TS</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Transformer-Based Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Informer, Autoformer, FEDformer, PatchTST, efficiency tricks for long sequences</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">N-BEATS & N-HiTS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Interpretable basis expansion, trend/seasonality stacks, multi-rate sampling</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">DeepAR</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Amazon's probabilistic RNN, negative binomial/Gaussian output, global model</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Temporal Fusion Transformer (TFT)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Variable selection networks, gating, LSTM encoder, multi-horizon, interpretability</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Mamba / SSM-Based Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Structured state space sequence models, selective state spaces, S4, TimeMamba</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Foundation Models for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Lag-Llama, TimeGPT, MOIRAI, Chronos, zero-shot forecasting, pre-training strategies</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Probabilistic & Generative DL</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Normalizing Flows for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Tractable density estimation, Flow-based DeepAR, multivariate probabilistic forecasting</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Diffusion Models for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">TimeGrad, CSDI, score-based generation, probabilistic forecasting via denoising</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">GAN-Based TS Generation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">TimeGAN, RCGAN, conditional generation, evaluation metrics for synthetic TS</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Anomaly Detection</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Classical Anomaly Detection</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Statistical control charts, CUSUM, Isolation Forest on TS, rolling z-score</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">DL-Based Anomaly Detection</span><span class="level-dot"></span></div>
+        <p class="topic-desc">LSTM-AE, VAE for TS, reconstruction error, SPOT, SRCNN, benchmark datasets</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Change Point Detection</span><span class="level-dot"></span></div>
+        <p class="topic-desc">PELT, BOCPD, ruptures library, Bayesian online CP, E-divisive</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">Time Series Classification & Clustering</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">DTW & Similarity Measures</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Dynamic time warping, Sakoe-Chiba band, soft-DTW, shape-based distance</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">TS Classification (ROCKET, Catch22)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Random convolutional kernels, 22 canonical features, HIVE-COTE, InceptionTime</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6 — CAUSAL INFERENCE
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="causal">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-causal-bg); color:var(--c-causal)">⑥</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-causal)">Section 06</div>
+        <div class="section-title">Causal Inference</div>
+      </div>
+      <div class="section-count">30 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">Potential Outcomes Framework</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Rubin Causal Model (PO Framework)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Potential outcomes, fundamental problem, SUTVA, ATE, ATT, ATC definitions</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Randomized Experiments (RCTs)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Gold standard, balance, unconfoundedness by design, Neyman estimator</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Selection Bias & Confounding</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Omitted variable bias, backdoor paths, unconfoundedness assumption, CIA</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Propensity Score Matching</span><span class="level-dot"></span></div>
+        <p class="topic-desc">PS estimation, overlap, trimming, matching estimators, ATT via nearest neighbor</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Inverse Probability Weighting (IPW)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Horvitz-Thompson estimator, stabilized weights, augmented IPW (AIPW), DR estimator</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Doubly Robust Estimation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Semiparametric efficiency, robustness to one nuisance misspecification, TMLE</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">DAGs & SCMs</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Directed Acyclic Graphs (DAGs)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Pearl's do-calculus foundation, nodes, edges, paths, colliders, d-separation</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Backdoor Criterion</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Blocking confounding paths, sufficient adjustment sets, do-calculus rule 2</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Front-Door Criterion</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Identification with unmeasured confounders via mediators, smoking-cancer example</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Structural Causal Models (SCMs)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Functional equations, noise terms, interventions vs observations, counterfactuals</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Causal Discovery Algorithms</span><span class="level-dot"></span></div>
+        <p class="topic-desc">PC, FCI, GES, NOTEARS, LiNGAM, constraint-based vs score-based discovery</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Identifiability Theory</span><span class="level-dot"></span></div>
+        <p class="topic-desc">ID algorithm, do-calculus completeness, c-components, Tian-Pearl</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Quasi-Experimental Designs</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Difference-in-Differences (DiD)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">2x2 DiD, parallel trends, anticipation, two-way FE interpretation, event study</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Staggered DiD & Callaway-Sant'Anna</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Treatment effect heterogeneity, negative weighting problem, aggregation, Sun-Abraham</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Regression Discontinuity Design (RDD)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Sharp vs fuzzy RDD, bandwidth selection, continuity assumption, Cattaneo et al.</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Instrumental Variables (IV)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Relevance, exclusion restriction, monotonicity, LATE, 2SLS, weak instruments</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Synthetic Control Method</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Abadie-Diamond-Hainmueller, donor pool, convex combination, placebo tests</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Augmented Synthetic Control (ASCm)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Ben-Michael et al., bias correction via outcome model, Jackknife+ inference</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Matrix Completion for Causal Inference</span><span class="level-dot"></span></div>
+        <p class="topic-desc">MCM (Athey et al.), nuclear norm penalty, panel data, interactive FE models</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Heterogeneous Treatment Effects</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">CATE Estimation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Conditional ATE, τ(x), meta-learners (S, T, X, R), subgroup analysis</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Causal Forests (Wager-Athey)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Generalized random forests, honesty, Neyman orthogonality, asymptotic normality</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">R-Learner & Orthogonal ML</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Nie-Wager R-learner, Robinson decomposition, cross-fitting, flexiblity</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Policy Learning & Optimal Treatment Rules</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Welfare-maximizing policy, Kitagawa-Tetenov, EWM, policy regret bounds</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Causal Time Series</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Granger Causality</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Predictive causality, bivariate and multivariate tests, limitations vs true causality</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">CausalImpact (Google)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Brodersen et al., counterfactual via BSTS, synthetic control in TS, posterior inference</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Causal Discovery in TS (PCMCI, DYNOTEARS)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Temporal causal graphs, PCMCI+ algorithm, Runge et al., spurious lagged correlations</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 7 — DOUBLE ML & SEMIPARAMETRICS
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="dml">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--c-dml-bg); color:var(--c-dml)">⑦</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:var(--c-dml)">Section 07</div>
+        <div class="section-title">Double/Debiased ML & Semiparametrics</div>
+      </div>
+      <div class="section-count">22 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">Foundations</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Neyman Orthogonality</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Moment conditions insensitive to nuisance perturbations, pathwise derivative zero</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Regularization Bias Problem</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Why LASSO on treatment creates bias, naive plug-in fails, need for debiasing</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Partially Linear Model (PLM)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Robinson 1988, Y = Dθ + g(X) + ε, partialing out controls, semiparametric</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Double ML (Chernozhukov et al. 2018)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">DML1/DML2, cross-fitting K-folds, √n-consistency, asymptotic normality</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Cross-Fitting (Sample Splitting)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Removing overfitting bias, K-fold cross-fitting, leave-one-out, DML implementation</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+
+      <div class="subsection-label">DML Models</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">PLR (Partially Linear Regression)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Continuous treatment, nuisance: E[Y|X] and E[D|X], residual-on-residual</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Interactive Regression Model (IRM)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Binary treatment, ATE/ATT, propensity score + outcome model, flexible nuisances</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">PLIV (Partially Linear IV)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Endogenous treatment + instruments, two first stages, semiparametric TSLS</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">IRIV (Interactive IV Regression)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Local average treatment effect, fuzzy RDD as IRIV, multiple instruments</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">DML for CATE (CATE-DML)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Heterogeneous effects in DML, best linear predictor, BLP-CATE, GATES</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">DML with Panel Data</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Fixed effects + DML, within-transformation, clustering, DiD + DML combination</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">DML for Time Series (TS-DML)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Dependent data, mixing conditions, temporal cross-fitting, Chiang et al. 2022</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Related Semiparametric Methods</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">TMLE (Targeted Maximum Likelihood)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">van der Laan-Rubin, targeted update step, substitution estimator, efficiency</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">One-Step Estimators</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Influence function correction, von Mises expansion, efficiency bound</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Semiparametric Efficiency Theory</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Cramér-Rao bound in semiparametric models, efficient influence function, tangent space</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">High-Dimensional Inference Post-Selection</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Post-LASSO OLS, debiased LASSO (Javanmard-Montanari, van de Geer et al.)</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Automatic Debiased ML (Auto-DML)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Riesz representer learning, automatic debiasing, Chernozhukov-Newey-Singh</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">DML in Econometrics vs ML (Connections)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Frisch-Waugh-Lovell, partialing out, R-learner equivalence, AIPW connection</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Synthetic DiD & Modern Panel</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Synthetic DiD (Arkhangelsky et al.)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Unit + time weights, combines SC and DiD, variance estimation, large panels</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Interactive Fixed Effects (Bai 2009)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Factor-loading structure, IFE as confounders, principal components approach</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 8 — SPATIAL & PANEL TS
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(251,191,36,0.1); color:#fbbf24">⑧</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:#fbbf24">Section 08</div>
+        <div class="section-title">Panel Data & Spatial Time Series</div>
+      </div>
+      <div class="section-count">18 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">Panel Data Methods</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Fixed Effects (FE) Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Within estimator, demeaning, LSDV, time FE, two-way FE, Mundlak device</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Random Effects (RE) Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">GLS estimator, Hausman test, RE vs FE, Swamy-Arora variance components</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Dynamic Panel (Arellano-Bond)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">GMM instruments, difference-GMM, system-GMM, instrument proliferation, Blundell-Bond</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Panel Cointegration</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Pedroni, Kao, Westerlund tests, panel FMOLS, panel DOLS, cross-section dependence</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Panel Unit Root Tests</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Im-Pesaran-Shin, LLC, Fisher-ADF, Pesaran CIPS, cross-sectional dependence correction</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Cross-Sectional Dependence in Panels</span><span class="level-dot"></span></div>
+        <p class="topic-desc">CD test (Pesaran), common factor approach, spatial correlation, HAC for panels</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Spatial Econometrics & Spatial TS</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Spatial Autocorrelation</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Moran's I, spatial weight matrix, LISA, Anselin 1988, spillovers</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Spatial Lag & Error Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">SAR, SEM, SDM, SARAR, ML estimation, LM tests, spatial heterogeneity</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Spatio-Temporal Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">STARMA, dynamic spatial panel, spatiotemporal Kriging, geostatistical TS</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Graph Neural Networks for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">DCRNN, STGCN, GMAN, adjacency learning, traffic and sensor network forecasting</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">High-Freq & Irregular TS</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">High-Frequency Data Methods</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Microstructure noise, TSRV, tick data, market impact, intraday seasonality</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Irregular & Continuous-Time Models</span><span class="level-dot"></span></div>
+        <p class="topic-desc">CARMA, Ornstein-Uhlenbeck, SDEs, Gaussian processes on continuous time</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Neural ODEs / CDEs for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Neural controlled differential equations, latent ODE, Kidger et al., irregular sampling</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Point Process & Event-Driven TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Hawkes process, temporal point processes, neural Hawkes, marked TPP</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Missing Data & Imputation in TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">State-space imputation, MICE for TS, diffusion-based imputation, CSDI, low-rank</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 9 — FRONTIER & APPLICATIONS
+  ═══════════════════════════════════════════ -->
+  <div class="section" id="frontier">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(99,102,241,0.1); color:#818cf8">⑨</div>
+      <div class="section-title-wrap">
+        <div class="section-tag" style="color:#818cf8">Section 09</div>
+        <div class="section-title">Frontier Research & Applications</div>
+      </div>
+      <div class="section-count">24 topics</div>
+    </div>
+    <div class="topic-grid">
+      <div class="subsection-label">LLMs & Foundation Models</div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">LLMs as Time Series Reasoners</span><span class="level-dot"></span></div>
+        <p class="topic-desc">LLMTime, PromptCast, text-numeric alignment, GPT-4 for forecasting benchmarks</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Pre-training on TS Data</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Masked value prediction, contrastive TS learning, domain adaptation, transfer</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Chronos (Amazon)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Language model for TS, quantization, tokenization of time series values, scaling</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">TimesFM (Google) & MOIRAI (Salesforce)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Decoder-only architectures, any-variate forecasting, patch-based tokenization</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Online Learning & Adaptive Methods</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Online Learning for TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Regret minimization, FTRL, follow-the-best-expert, prediction with expert advice</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Adaptive Conformal Inference (ACI)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Gibbs-Candès, online coverage guarantee, score update, distribution shift</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Distribution Shift in TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Concept drift, covariate shift, label shift, window-based vs. continual adaptation</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Reinforcement Learning & Control</div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">RL for Sequential Forecasting Decisions</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Inventory control, POMDP for demand, reward shaping, offline RL for planning</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Model Predictive Control (MPC) + TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">TS forecast as constraint, stochastic MPC, rolling-horizon optimization, energy grid</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Domain Applications</div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Financial Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Asset returns, volatility forecasting, risk measures (VaR, ES), factor models</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Demand Forecasting (Retail/Supply Chain)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Intermittent demand (Croston), count data, inventory optimization, M5 lessons</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Energy & Load Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Day-ahead electricity, probabilistic load, renewable generation, weather covariates</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Macroeconomic Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">GDP, inflation, unemployment, factor models, machine learning in macro, big data</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Epidemiological Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">SIR/SEIR models, disease surveillance, FluSight, COVID-19 ensemble forecasts</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">Climate & Environmental TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Long-range dependence in climate, paleoclimate, downscaling, extreme events</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-phd">
+        <div class="topic-card-top"><span class="topic-name">Neuroscience & Neural TS</span><span class="level-dot"></span></div>
+        <p class="topic-desc">EEG/fMRI connectivity, LFP analysis, Granger in neural circuits, GLM-HMM</p>
+        <div class="topic-tags"><span class="tag">phd</span></div>
+      </div>
+
+      <div class="subsection-label">Software & Tooling</div>
+      <div class="topic-card lv-foundation">
+        <div class="topic-card-top"><span class="topic-name">statsmodels, pmdarima, arch</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Python statistical TS library, auto-ARIMA, GARCH modeling in Python/R</p>
+        <div class="topic-tags"><span class="tag">foundation</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">Darts, StatsForecast, MLForecast</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Nixtla ecosystem, unified API, backtesting, cross-learning, probabilistic forecasting</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-intermediate">
+        <div class="topic-card-top"><span class="topic-name">GluonTS & PyTorch Forecasting</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Deep learning TS frameworks, DeepAR, TFT implementation, dataset loaders</p>
+        <div class="topic-tags"><span class="tag">intermediate</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">DoubleML Python/R Package</span><span class="level-dot"></span></div>
+        <p class="topic-desc">Bach et al., PLR/IRM/PLIV/IRIV, sklearn integration, cluster robust inference</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+      <div class="topic-card lv-advanced">
+        <div class="topic-card-top"><span class="topic-name">EconML (Microsoft Research)</span><span class="level-dot"></span></div>
+        <p class="topic-desc">CATE estimators, DML, causal forests, orthogonal forests, policy learner</p>
+        <div class="topic-tags"><span class="tag">advanced</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Time Series &amp; Forecasting · Complete Curriculum · 200+ Topics · 9 Domains
+  </footer>
+</div>
+</body>
+</html>
